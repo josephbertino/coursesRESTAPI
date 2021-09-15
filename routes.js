@@ -21,11 +21,11 @@ router.get('/users', authenticateUser , asyncHandler( async (req, res) => {
 
 // Create a new user
 router.post('/users', asyncHandler( async (req, res) => {
-  
-  // Set the Location header to "/"
+  await User.create(req.body);
 
+  // Set the Location header to "/" and
   // Return a 201 HTTP status code and no content
-  res.status(201).end();
+  res.setHeader('Location','/').status(201).end();
 }))
 
 module.exports = router;
