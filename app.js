@@ -18,10 +18,11 @@ app.use(morgan('dev'));
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to the REST API project!',
+    message: 'Welcome to User/Courses API!',
   });
 });
 
+// Add routes
 app.use('/api',routes);
 
 // send 404 if no other route matched
@@ -38,8 +39,7 @@ app.use((err, req, res, next) => {
   }
   
   res.status(err.status || 500).json({
-    message: err.message,
-    error: {},
+    message: err.message
   });
 });
 

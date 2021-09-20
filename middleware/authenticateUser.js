@@ -18,7 +18,7 @@ exports.authenticateUser =  async (req, res, next) => {
     // by their username (i.e. the user's "key" from the Authorization header).
     const user = await User.findOne({
       where: {
-        username: credentials.name
+        emailAddress: credentials.name
       }
     });
     if (user) {
@@ -42,7 +42,7 @@ exports.authenticateUser =  async (req, res, next) => {
       }
     } else {
       // No user
-      message = `No user exists for email address: ${user.emailAddress}`;
+      message = `No user exists for email address: ${credentials.name}`;
     }
   } else {
     // No credentials

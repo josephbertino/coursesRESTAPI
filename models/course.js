@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
     /**
@@ -11,14 +12,59 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Course.belongsTo(models.User);
+      Course.belongsTo(models.User, {
+        foreignKey: {
+          name: 'userId',
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          validate: {
+            async userExists(value) {
+              const user = await models.User.findOne( {
+                where: {
+                  id: value
+                }
+              })
+              if (!user) {
+                throw new Error(`User with id ${value} does not exist`);
+              }
+            }
+          }
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      });
     }
   };
   Course.init({
-    title: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    estimatedTime: DataTypes.STRING,
-    materialsNeeded: DataTypes.STRING
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Course title cannot be empty"
+        }
+      }
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Course description cannot be empty"
+        }
+      }
+    },
+    estimatedTime: {
+      type: DataTypes.STRING,
+    },
+    materialsNeeded: {
+      type: DataTypes.STRING
+    }
   }, {
     sequelize,
     modelName: 'Course',
