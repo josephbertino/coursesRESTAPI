@@ -1,5 +1,4 @@
-# A collection of test for Project 9 in the Full Stack JavaScript Techdegree
-
+# A collection of tests for Project 9 in the Full Stack JavaScript Techdegree
 
 # Tests for the User Routes section of the rubric
 
@@ -16,7 +15,7 @@ Content-Type: application/json
   "firstName": "John",
   "lastName": "Smith",
   "emailAddress": "john23@smith.com",
-  "password": "password"
+  "password": "johnpassword"
 }
 
 ### Create User (Existing Email) - EXCEEDS
@@ -28,7 +27,7 @@ Content-Type: application/json
   "firstName": "Joe",
   "lastName": "Smith",
   "emailAddress": "joe@smith.com",
-  "password": "password"
+  "password": "joepassword4"
 }
 
 
@@ -38,7 +37,7 @@ Content-Type: application/json
 GET http://localhost:5000/api/courses HTTP/1.1
 
 ### Get Course
-GET http://localhost:5000/api/courses/1 HTTP/1.1
+GET http://localhost:5000/api/courses/3 HTTP/1.1
 
 ### Create Course (Minimum Data)
 POST http://localhost:5000/api/courses HTTP/1.1
@@ -48,7 +47,7 @@ Content-Type: application/json
 {
   "title": "My new course",
   "description": "This is the course I created",
-  "userId": 1
+  "userId": 2
 }
 
 ### Update Course (Minimum Data)
@@ -64,23 +63,7 @@ Content-Type: application/json
 }
 
 ### Delete Course (With Auth)
-DELETE http://localhost:5000/api/courses/4 HTTP/1.1
-Authorization: Basic joe@smith.com:joepassword
-
-### Update Course (Not Owner) - EXCEEDS
-PUT http://localhost:5000/api/courses/3 HTTP/1.1
-Authorization: Basic joe@smith.com:joepassword
-Content-Type: application/json
-
-{
-	"id": 3,
-  "title": "Updated course!",
-  "description": "The course description has been updated as well.",
-  "userId": 1
-}
-
-### Delete Course (Not Owner) - EXCEEDS
-DELETE http://localhost:5000/api/courses/3 HTTP/1.1
+DELETE http://localhost:5000/api/courses/5 HTTP/1.1
 Authorization: Basic joe@smith.com:joepassword
 
 
@@ -114,19 +97,6 @@ Content-Type: application/json
   "description": ""
 }
 
-### Create User (Invalid Email) - EXCEEDS
-POST http://localhost:5000/api/users HTTP/1.1
-Authorization: Basic joe@smith.com:joepassword
-Content-Type: application/json
-
-{
-  "firstName": "Sam",
-  "lastName": "Smith",
-  "emailAddress": "sam.com",
-  "password": "password"
-}
-
-
 # Tests for the Permissions section of the rubric
 
 ### Get User (No Auth)
@@ -149,5 +119,33 @@ Content-Type: application/json
   "description": ""
 }
 
+### Create User (Invalid Email) - EXCEEDS
+POST http://localhost:5000/api/users HTTP/1.1
+Authorization: Basic joe@smith.com:joepassword
+Content-Type: application/json
+
+{
+  "firstName": "Sam",
+  "lastName": "Smith",
+  "emailAddress": "sam.com",
+  "password": "password"
+}
+
 ### Delete Course (No Auth)
 DELETE http://localhost:5000/api/courses/1 HTTP/1.1
+### Update Course (Not Owner) - EXCEEDS
+PUT http://localhost:5000/api/courses/3 HTTP/1.1
+Authorization: Basic joe@smith.com:joepassword
+Content-Type: application/json
+
+{
+	"id": 3,
+  "title": "Updated course!",
+  "description": "The course description has been updated as well.",
+  "userId": 1
+}
+
+### Delete Course (Not Owner) - EXCEEDS
+DELETE http://localhost:5000/api/courses/3 HTTP/1.1
+Authorization: Basic joe@smith.com:joepassword
+

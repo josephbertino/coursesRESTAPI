@@ -18,19 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: {
           name: 'userId',
           type: DataTypes.INTEGER,
-          allowNull: false,
-          validate: {
-            async userExists(value) {
-              const user = await User.findOne( {
-                where: {
-                  id: value
-                }
-              })
-              if (!user) {
-                throw new Error(`User with id ${value} does not exist`);
-              }
-            }
-          }
+          allowNull: false
       }});
     }
   };

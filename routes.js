@@ -82,6 +82,7 @@ router.post('/courses', authenticateUser, asyncHandler( async (req, res) => {
 
 // Update the corresponding course and return a 204 HTTP status code and no content.
 router.put('/courses/:id', authenticateUser, asyncHandler( async (req, res) => {
+  
   let course = await Course.findOne( {
     where : {
       id: req.params.id
@@ -89,6 +90,13 @@ router.put('/courses/:id', authenticateUser, asyncHandler( async (req, res) => {
   });
 
   if (course) {
+  
+    if (req.body.id && req.body.id != course.id) {
+      const error = new Error(`Updating the Course id (primary key) is not permitted. This Course has id ${course.id}`);
+      error.status = 400;
+      throw error;
+    }
+    
     await course.update(req.body)
 
     // Return 204 status with no content
