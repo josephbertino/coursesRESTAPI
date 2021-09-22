@@ -72,6 +72,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Course',
+    defaultScope: {
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+    }
   });
   return Course;
 };

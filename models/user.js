@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "User email cannot be empty"
         },
         isEmail: {
-          msg: "User email not formatted properly"
+          msg: "User email not properly formatted"
         }
       }
     },

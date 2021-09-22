@@ -17,6 +17,7 @@ router.get('/users', authenticateUser, asyncHandler( async (req, res) => {
   
   // Send a 200 HTTP status code on success
   res.status(200).json( { 
+    id: user.id,
     name: `${user.firstName} ${user.lastName}`,
     username: user.emailAddress
    } );
@@ -89,31 +90,44 @@ router.post('/courses', authenticateUser, asyncHandler( async (req, res) => {
 
 // PUT:: Update the course with the given ID. First authenticate the user making the PUT request
 router.put('/courses/:id', authenticateUser, asyncHandler( async (req, res) => {
-  
+  const user = req.currentUser;
+
   let course = await Course.findOne( {
     where : {
       id: req.params.id
     }
   });
 
-  if (course) {
-    // Validate the changes and update the record
-    // Note that even if the req.body tries to change the primary key `id`, it will not change! That's good
-    await course.update(req.body)
+  let message;
 
-    // Return 204 status with no content
-    res.status(204).end();
+  if (course) {
+    if (course.userId == user.id) {
+      // If the authenticating user is the owner of this Course,
+      // Validate the changes and update the record
+      // Note that even if the req.body tries to change the primary key `id`, it will not change!
+      await course.update(req.body)
+      
+      // Return 204 status with no content
+      res.status(204).end();
+    } else {
+      message = `Only the owner of this Course (userId: ${course.userId}) may modify this Course`
+    }
   } 
   else {
-    // Course not found
-    const error = new Error(`Course with id ${req.params.id} does not exist`);
+    message = `Course with id ${req.params.id} does not exist`
+  }
+
+  if (message) {
+    const error = new Error(message);
     error.status = 400;
     throw error;
-  };
+  }
 }));
 
 // DELETE:: Delete the corresponding course after authenticating the user
 router.delete('/courses/:id', authenticateUser, asyncHandler( async (req, res)=> {
+  const currentUser = req.currentUser;
+  
   // Does the course with this ID exist?
   let course = await Course.findOne( {
     where : {
@@ -121,13 +135,23 @@ router.delete('/courses/:id', authenticateUser, asyncHandler( async (req, res)=>
     }
   })
 
+  let message;
+
   if (course) {
-    // Delete the course and return a 204 HTTP status and no content
-    await course.destroy();
-    res.status(204).end();
+    if (course.userId == currentUser.id) {
+      // If the authenticating user is the owner of this Course,
+      // Delete the course and return a 204 HTTP status and no content
+      await course.destroy();
+      res.status(204).end();
+    } else {
+      message = `Only the owner of this Course (userId: ${course.userId}) may modify this Course`
+    }
   } else {
-    // Course does not exist
-    const error = new Error(`Course with id ${req.params.id} does not exist`);
+    message = `Course with id ${req.params.id} does not exist`;
+  }
+
+  if (message) {
+    const error = new Error(message);
     error.status = 400;
     throw error;
   }
