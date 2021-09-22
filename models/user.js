@@ -12,10 +12,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // One User can be the owner of many courses
       User.hasMany(models.Course, 
       { 
         foreignKey: {
+          // the Course attribute 'userId' will point to User's primary key ('id')
           name: 'userId',
           type: DataTypes.INTEGER,
           allowNull: false
@@ -64,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "User password cannot be empty"
+          msg: "Password cannot be empty"
         },
         len: {
           args: [12,20],
@@ -74,6 +75,7 @@ module.exports = (sequelize, DataTypes) => {
     } 
   }, {
     hooks: {
+      // Only hash the password before saving, and after validating the length of the plaintext
       beforeCreate: (user) => {
         user.password = bcrypt.hashSync(user.password, 10);
       },

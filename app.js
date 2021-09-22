@@ -46,9 +46,9 @@ app.use((err, req, res, next) => {
 // set our port
 app.set('port', process.env.PORT || 5000);
 
-// 3.5) Use Sequelize's `authenticate` function to test the database connection.
-// A message should be logged to the console informing the user that the connection was
-// successful or not
+// Use Sequelize's `authenticate` function to test the database connection.
+// A message should be logged to the console informing the user whether the connection was
+// successful
 (async () => {
   try {
     await sequelize.authenticate();
@@ -58,7 +58,7 @@ app.set('port', process.env.PORT || 5000);
   }
 })();
 
-// We should only start listening on the port once we've synced with the sequelize db
+// We should start listening on the port once we've synced with the sequelize db
 sequelize.sync()
   .then( () => {
     const server = app.listen(app.get('port'), () => {

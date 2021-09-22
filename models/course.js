@@ -11,13 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // One User can own many courses, but a Course may only belong to one User
       Course.belongsTo(models.User, {
         foreignKey: {
+          // the 'userId' field will link to the User's primary key
           name: 'userId',
           type: DataTypes.INTEGER,
+          // Require this field in a new Course instance
           allowNull: false,
           validate: {
+            // Only accept this Course if the proposed User owner exists
             async userExists(value) {
               const user = await models.User.findOne( {
                 where: {
@@ -59,6 +62,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    // These two fields are not necessary
     estimatedTime: {
       type: DataTypes.STRING,
     },
