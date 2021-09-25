@@ -2,7 +2,7 @@
 
 // 'basic-auth' is the library to read the Basic Authorization credentials
 const auth = require('basic-auth');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { User } = require('../models');
 
 // Middleware to authenticate the request using Basic Authentication.
