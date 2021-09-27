@@ -18,20 +18,20 @@ module.exports = (sequelize, DataTypes) => {
           name: 'userId',
           type: DataTypes.INTEGER,
           // Require this field in a new Course instance
-          allowNull: false,
-          validate: {
-            // Only accept this Course if the proposed User owner exists
-            async userExists(value) {
-              const user = await models.User.findOne( {
-                where: {
-                  id: value
-                }
-              })
-              if (!user) {
-                throw new Error(`User with id ${value} does not exist`);
-              }
-            }
-          }
+          // allowNull: false,
+          // validate: {
+          //   // Only accept this Course if the proposed User exists
+          //   async userExists(value) {
+          //     const user = await models.User.findOne( {
+          //       where: {
+          //         id: value
+          //       }
+          //     })
+          //     if (!user) {
+          //       throw new Error(`User with id ${value} does not exist`);
+          //     }
+          //   }
+          // }
         },
         onDelete: 'cascade',
         onUpdate: 'cascade'

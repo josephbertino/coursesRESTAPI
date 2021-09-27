@@ -119,7 +119,7 @@ router.put('/courses/:id', authenticateUser, asyncHandler( async (req, res) => {
 
   if (message) {
     const error = new Error(message);
-    error.status = 400;
+    error.status = 403;
     throw error;
   }
 }));
@@ -152,7 +152,7 @@ router.delete('/courses/:id', authenticateUser, asyncHandler( async (req, res)=>
 
   if (message) {
     const error = new Error(message);
-    error.status = 400;
+    error.status = 403;
     throw error;
   }
 }))
